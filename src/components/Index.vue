@@ -27,7 +27,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">
+              <el-menu-item index="user">
                 <i class="el-icon-s-custom"></i>
               <span>用户界面</span>
               </el-menu-item>
@@ -53,7 +53,9 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
