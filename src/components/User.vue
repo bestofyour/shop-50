@@ -17,7 +17,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="180">
-        <el-button size="small" @click="editList(obj.row.id)" icon="el-icon-edit" plain type="primary"></el-button>
+        <el-button size="small" @click="editList()" icon="el-icon-edit" plain type="primary"></el-button>
         <el-button size="small" icon="el-icon-message" plain type="danger"></el-button>
         <el-button size="small" icon="el-icon-delete" plain type="info"></el-button>
       </el-table-column>
