@@ -14,8 +14,8 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
+          router
           unique-opened
-          default-active="2"
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
@@ -39,13 +39,13 @@
               <span>权限管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="2-1">
+              <el-menu-item index="roles">
                 <i class="el-icon-user-solid"></i>
-              <span>角色列表</span>
+              <span slot="title">角色列表</span>
               </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-              <el-menu-item index="2-2">
+              <el-menu-item index="rights">
                 <i class="el-icon-s-tools"></i>
               <span>权限列表</span>
               </el-menu-item>
