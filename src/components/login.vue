@@ -1,14 +1,14 @@
 <template>
   <div class="login">
     <el-form ref="form" status-icon :model="form" :rules="rules" label-width="80px">
-      <img class="pic" src="../assets/cat.jpg" alt="">
+      <img class="pic" src="../assets/cat.jpg" alt />
       <el-form-item label="用户名" prop="username">
         <el-input placeholder="请输入用户名" v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item label="密码"  prop="password">
+      <el-form-item label="密码" prop="password">
         <el-input placeholder="请输入密码" prop="password" type="password" v-model="form.password"></el-input>
       </el-form-item>
-      <el-form-item >
+      <el-form-item>
         <el-button type="primary" @click="sumbitBtn" class="loginBtn">登录</el-button>
         <el-button @click="resetBtn">重置</el-button>
       </el-form-item>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -41,10 +40,18 @@ export default {
     resetBtn () {
       this.$refs.form.resetFields()
     },
-    sumbitBtn () {
+    async sumbitBtn () {
+      //    const res = await this.$axios.post('login', this.form)
+      //   if (res.status === 200) {
+      //   this.$message.success(res.data.meta.msg)
+      //   localStorage.setItem('token', res.data.data.token)
+      //  this.$router.push('/index')
+      //  }
+      // }
+
       this.$refs.form.validate(flag => {
         if (!flag) return
-        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
+        this.$axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
           if (res.data.meta.status === 200) {
             this.$message.success(res.data.meta.msg)
             localStorage.setItem('token', res.data.data.token)
@@ -81,7 +88,7 @@ export default {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top:-60px;
+    top: -60px;
     border-radius: 50%;
     border: 5px solid #fff;
   }

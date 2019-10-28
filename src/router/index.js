@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/login.vue'
 import Index from '../components/Index.vue'
-import User from '../components/User.vue'
+import Users from '../components/User.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -12,7 +12,7 @@ const routes = [
     path: '/index',
     component: Index,
     children: [
-      { path: '/user', name: 'user', component: User }
+      { path: '/users', name: 'user', component: Users }
     ]
   }
 
