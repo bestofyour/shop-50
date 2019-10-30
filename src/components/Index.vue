@@ -21,33 +21,15 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
+          <el-submenu :index="menu.path" v-for="menu in menuList" :key="menu.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{ menu.authName }}</span>
             </template>
-            <el-menu-item-group>
-              <el-menu-item index="user">
+            <el-menu-item-group >
+              <el-menu-item :index="item.path" v-for="item in menu.children" :key="item.id" >
                 <i class="el-icon-s-custom"></i>
-              <span>用户界面</span>
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-           <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="roles">
-                <i class="el-icon-user-solid"></i>
-              <span slot="title">角色列表</span>
-              </el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group>
-              <el-menu-item index="rights">
-                <i class="el-icon-s-tools"></i>
-              <span>权限列表</span>
+              <span>{{ item.authName }}</span>
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -62,6 +44,17 @@
 
 <script>
 export default {
+  data () {
+    return {
+      menuList: {}
+    }
+  },
+  async created () {
+    const { data } = await this.$axios.get('menus')
+    if (data.meta.status === 200) {
+      this.menuList = data.data
+    }
+  },
   methods: {
     logout () {
       this.$confirm('是否退出该系统？', '温馨提示', {
@@ -74,6 +67,12 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    }
+  },
+  computed: {
+    defaultActive () {
+      // console.log(this.$route.path.slice(1))
+      return this.$route.path.slice(1)
     }
   }
 }

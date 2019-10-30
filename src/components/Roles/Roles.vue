@@ -197,7 +197,7 @@ export default {
       const url = this.titleDialog === '添加用户' ? 'roles' : `roles/${this.showid}`
       await this.$refs.addFrom.validate()
       const { data } = await this.$axios[method](url, this.addFrom)
-      if (data.meta.status === 200) {
+      if (data.meta.status === 200 || data.meta.status === 201) {
         this.$message.success('you are right')
         this.getRolesList()
         this.saveDialog = false
