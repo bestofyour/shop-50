@@ -55,11 +55,11 @@
         </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180">
+      <el-table-column label="操作" width="250">
         <template v-slot:default="obj">
         <el-button size="small" @click="editList(obj.row)" icon="el-icon-edit" plain type="primary"></el-button>
-        <el-button size="small"  @click="delList(obj.row.id)" icon="el-icon-message" plain type="danger"></el-button>
-        <el-button size="small"  @click="editList(obj.row.id)" icon="el-icon-delete" plain type="info"></el-button>
+        <el-button size="small"  @click="delList(obj.row.id)" icon="el-icon-delete" plain type="danger"></el-button>
+        <el-button size="small"  @click="assignRoles(obj.row)" icon="el-icon-message" plain type="info">分配角色</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,6 +94,33 @@
           <template v-slot:footer>
         <el-button @click="editDialog = false">取 消</el-button>
         <el-button type="primary" @click="editUser">确 定</el-button>
+      </template>
+  </el-dialog>
+  <!-- 分配角色对话框 -->
+   <el-dialog
+    title="提示"
+    :visible.sync="assignDialog"
+    width="40%"
+    class="editDialog"
+    >
+    <el-form :model="assignList"  label-width="80px" >
+      <el-form-item label="用户名" >
+        <el-tag>{{assignList.username}}</el-tag>
+      </el-form-item>
+      <el-form-item label="角色列表">
+        <el-select v-model="assignList.rid" placeholder="请选择">
+          <el-option
+            v-for="l1 in options"
+            :key="l1.id"
+            :label="l1.roleName"
+            :value="l1.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+          <template v-slot:footer>
+        <el-button @click="assignDialog = false">取 消</el-button>
+        <el-button type="primary" @click="editRoles" >确 定</el-button>
       </template>
   </el-dialog>
   </div>
@@ -138,7 +165,17 @@ export default {
         mobile: [
           { pattern: /^1[3-9]\d{9}/, message: '请输入正确的手机号', trigger: ['blur', 'change'] }
         ]
-      }
+      },
+      assisnId: '',
+      assignDialog: false,
+      assignList:
+        {
+          username: '',
+          rid: '',
+          id: ''
+        },
+      options: [
+      ]
     }
   },
   methods: {
@@ -266,6 +303,37 @@ export default {
     },
     resetDialog () {
       this.$refs.form.resetFields()
+    },
+    async assignRoles (row) {
+      this.assignDialog = true
+      this.assignList.id = row.id
+      this.assignList.username = row.username
+      const res = await this.$axios.get(`users/${row.id}`)
+      if (res.data.meta.status === 200) {
+        this.assignList.rid = res.data.data.rid === -1 ? '' : res.data.data.rid
+      }
+      const { data } = await this.$axios.get('roles')
+      if (data.meta.status === 200) {
+        this.options = data.data
+        console.log(this.options)
+      } else {
+        this.$message.error(data.meta.msg)
+      }
+    },
+    async editRoles () {
+      if (this.assignList.rid === '') {
+        this.$message.warning('请选择角色')
+        return false
+      } else {
+        const { data } = await this.$axios.put(`users/${this.assignList.id}/role`, {
+          rid: this.assignList.rid
+        })
+        if (data.meta.status === 200) {
+          this.$message.success(data.meta.msg)
+          this.getList()
+          this.assignDialog = false
+        }
+      }
     }
   },
   created () {
